@@ -17,7 +17,7 @@ Initial plan:
       - [x] write examples
     - [x] Perf stats
       - [x] write examples
-    - [ ] User activity
+    - [ ] User activity  - This looks tedious, will do after
       - [ ] write examples
 [ ] Get all user active games
     - [ ] write examples
