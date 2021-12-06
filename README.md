@@ -11,7 +11,14 @@ Initial plan:
 [x] Get account data
     - [x] write examples
 [ ] Get public user data
-    - [ ] write examples
+    - [x] User public data
+      - [x] write examples
+    - [x] Rating history (Not working!)
+      - [x] write examples
+    - [ ] Perf stats
+      - [ ] write examples
+    - [ ] User activity
+      - [ ] write examples
 [ ] Get all user active games
     - [ ] write examples
 

@@ -60,7 +60,7 @@ func (c *Client) do(req *http.Request, v interface{}) (*http.Response, error) {
 		return nil, err
 	}
 	if resp.StatusCode != 200 {
-		return resp, fmt.Errorf("expected status code 200, got %d", resp.StatusCode)
+		return resp, fmt.Errorf("expected status code 200, got %d - Requested URL was: %s", resp.StatusCode, req.URL)
 	}
 	defer resp.Body.Close()
 	err = json.NewDecoder(resp.Body).Decode(v)

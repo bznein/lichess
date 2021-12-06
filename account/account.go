@@ -78,6 +78,7 @@ type Account struct {
 	Url            string   `json:"url"`
 	Playing        string   `json:"playing"`
 	CompletionRate int      `json:"completionRate"`
+	Count          Count    `json:"count"`
 	Streaming      bool     `json:"streaming"`
 	Followable     bool     `json:"followable"`
 	Following      bool     `json:"following"`
