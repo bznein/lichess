@@ -9,7 +9,6 @@ import (
 	"github.com/bznein/lichess"
 )
 
-// NOTE: This is not working currently (see issue #1)
 func main() {
 	client := lichess.Client{
 		HttpClient: &http.Client{},
@@ -21,5 +20,7 @@ func main() {
 		log.Fatalf("Error getting profile: %s", err.Error())
 	}
 
-	fmt.Printf("%v\n", history[0])
+	firstEntry := history[0]
+	firstP := firstEntry.Points[0]
+	fmt.Printf("In %s, on %d/%d/%d, bznein had a rating of %d\n", firstEntry.Name, firstP[2], firstP[1], firstP[0], firstP[3])
 }

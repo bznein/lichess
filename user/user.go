@@ -11,7 +11,7 @@ type RatingEntry struct {
 	Points [][]int
 }
 
-type RatingHistory []RatingHistory
+type RatingHistory []RatingEntry
 
 type Glicko struct {
 	Rating      float64 `json:"rating"`

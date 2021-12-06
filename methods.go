@@ -7,6 +7,7 @@ import (
 
 	"github.com/bznein/lichess/account"
 	"github.com/bznein/lichess/analysis"
+	"github.com/bznein/lichess/challenges"
 	"github.com/bznein/lichess/games"
 	"github.com/bznein/lichess/openings"
 	"github.com/bznein/lichess/tablebase"
@@ -37,7 +38,7 @@ func (c *Client) GetUser(username string) (*user.User, error) {
 
 func (c *Client) GetUserRatingHistory(username string) (user.RatingHistory, error) {
 	req, err := c.newRequest("GET", fmt.Sprintf("/api/user/%s/rating-history", username), nil)
-
+	req.Header.Del("Content-Type")
 	user := user.RatingHistory{}
 	_, err = c.do(req, &user)
 	if err != nil {
@@ -167,4 +168,17 @@ func (c *Client) GetRealTimeUsersStatus(ids []string, withGameIds bool) (user.Re
 		return nil, err
 	}
 	return realTime, err
+
+}
+
+func (c *Client) GetChallenges() (*challenges.Challenges, error) {
+	req, err := c.newRequest("GET", "/api/challenge", nil)
+	req.Header.Del("Content-Type")
+	challenges := &challenges.Challenges{}
+	_, err = c.do(req, challenges)
+	if err != nil {
+		return nil, err
+	}
+	return challenges, err
+
 }
