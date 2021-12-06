@@ -26,7 +26,6 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error analyzing position: %s", err.Error())
 	}
-	fmt.Println(*analysis)
 
 	fmt.Printf("Cached Analysis at %d knodes, depth %d:\n", analysis.Knodes, analysis.Depth)
 	fmt.Printf("Best continuation: %s, eval: %f\n", analysis.Pvs[0].Moves, float64(analysis.Pvs[0].Cp)/100.0)

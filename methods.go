@@ -8,6 +8,7 @@ import (
 	"github.com/bznein/lichess/analysis"
 	"github.com/bznein/lichess/games"
 	"github.com/bznein/lichess/openings"
+	"github.com/bznein/lichess/tablebase"
 	"github.com/bznein/lichess/user"
 )
 
@@ -135,4 +136,20 @@ func (c *Client) AnalyzePosition(request analysis.Request) (*analysis.Analysis, 
 		return nil, err
 	}
 	return analysis, err
+}
+
+func (c *Client) AnalyzeTablebase(variant string, fen string) (*tablebase.Tablebase, error) {
+	req, err := c.newRequest("GET", fmt.Sprintf("/%s", variant), nil)
+	q := req.URL.Query()
+
+	q.Add("fen", fen)
+
+	req.URL.RawQuery = q.Encode()
+
+	tbEntry := &tablebase.Tablebase{}
+	_, err = c.do(req, tbEntry)
+	if err != nil {
+		return nil, err
+	}
+	return tbEntry, err
 }
