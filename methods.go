@@ -2,9 +2,11 @@ package lichess
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/bznein/lichess/account"
 	"github.com/bznein/lichess/games"
+	"github.com/bznein/lichess/openings"
 	"github.com/bznein/lichess/user"
 )
 
@@ -72,4 +74,35 @@ func (c *Client) GetTop10() (*user.Top10, error) {
 		return nil, err
 	}
 	return top10, err
+}
+
+func (c *Client) ExploreOpening(request openings.Request, gameType string) (*openings.Opening, error) {
+	req, err := c.newRequest("GET", fmt.Sprintf("/%s", gameType), nil)
+	q := req.URL.Query()
+
+	if request.Fen != "" {
+		q.Add("fen", request.Fen)
+	}
+	if request.Play != "" {
+		q.Add("play", request.Play)
+	}
+	if request.Since != 0 {
+		q.Add("since", strconv.Itoa(request.Since))
+	}
+	if request.Until != 0 {
+		q.Add("until", strconv.Itoa(request.Until))
+	}
+	if request.Moves != 0 {
+		q.Add("moves", strconv.Itoa(request.Moves))
+	}
+	if request.TopGames != 0 {
+		q.Add("topGames", strconv.Itoa(request.TopGames))
+	}
+
+	openings := &openings.Opening{}
+	_, err = c.do(req, openings)
+	if err != nil {
+		return nil, err
+	}
+	return openings, err
 }
