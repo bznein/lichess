@@ -6,27 +6,9 @@ Go client for Lichess.org
 Generate a Token at [this page](https://lichess.org/account/oauth/token/create?)
 Note: based on the permission granted, some operations might not be available
 
-# 06/12/2021:
-Initial plan:
-[x] Get account data
-    - [x] write examples
-[ ] Get public user data
-    - [x] User public data
-      - [x] write examples
-    - [x] Rating history (Not working!)
-      - [x] write examples
-    - [x] Perf stats
-      - [x] write examples
-    - [ ] User activity  - This looks tedious, will do after
-      - [ ] write examples
-[ ] Get all user active games
-    - [ ] write examples
+# Examples
+Please check out the directory [here](/examples)
 
-[ ] Check returned value for token permission not valid and add to documentation
-[ ] Add unit tests
-[ ] Make game type enum
-[ ] Clean this README
-
-[ ] Visualize a game status
-[ ] Make a move
-[ ] Make error codes in const
+# Limitation
+At the moment this client implements a small subset of the whole Lichess API.
+No POST operation have been implemented yet
