@@ -15,8 +15,8 @@ Initial plan:
       - [x] write examples
     - [x] Rating history (Not working!)
       - [x] write examples
-    - [ ] Perf stats
-      - [ ] write examples
+    - [x] Perf stats
+      - [x] write examples
     - [ ] User activity
       - [ ] write examples
 [ ] Get all user active games
@@ -24,3 +24,5 @@ Initial plan:
 
 [ ] Check returned value for token permission not valid and add to documentation
 [ ] Add unit tests
+[ ] Make game type enum
+[ ] Clean this README
