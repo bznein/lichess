@@ -26,3 +26,7 @@ Initial plan:
 [ ] Add unit tests
 [ ] Make game type enum
 [ ] Clean this README
+
+[ ] Visualize a game status
+[ ] Make a move
+[ ] Make error codes in const

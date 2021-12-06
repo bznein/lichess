@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/bznein/lichess/account"
+	"github.com/bznein/lichess/analysis"
 	"github.com/bznein/lichess/games"
 	"github.com/bznein/lichess/openings"
 	"github.com/bznein/lichess/user"
@@ -99,10 +100,39 @@ func (c *Client) ExploreOpening(request openings.Request, gameType string) (*ope
 		q.Add("topGames", strconv.Itoa(request.TopGames))
 	}
 
+	req.URL.RawQuery = q.Encode()
 	openings := &openings.Opening{}
 	_, err = c.do(req, openings)
 	if err != nil {
 		return nil, err
 	}
 	return openings, err
+}
+
+func (c *Client) AnalyzePosition(request analysis.Request) (*analysis.Analysis, error) {
+	req, err := c.newRequest("GET", "/api/cloud-eval", nil)
+	q := req.URL.Query()
+
+	if request.Fen != "" {
+		q.Add("fen", request.Fen)
+	}
+	if request.MultiPV != 0 {
+		q.Add("multiPv", strconv.Itoa(request.MultiPV))
+	}
+	if request.Variant != "" {
+		q.Add("variant", request.Variant)
+	}
+	analysis := &analysis.Analysis{}
+
+	req.URL.RawQuery = q.Encode()
+
+	response, err := c.do(req, analysis)
+	if err != nil {
+		if response.StatusCode == 404 {
+			// The position is not cached, this is not an error
+			return nil, fmt.Errorf("position analysis not cached")
+		}
+		return nil, err
+	}
+	return analysis, err
 }

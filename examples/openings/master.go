@@ -21,8 +21,8 @@ func main() {
 
 	r := openings.Request{
 		Fen:      "rnbqkb1r/ppp2ppp/3p1n2/8/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 4",
-		Play:     "play=Nxe4",
-		Since:    2019,
+		Play:     "f6e4",
+		Since:    2018,
 		Until:    0,
 		Moves:    0,
 		TopGames: 0,
