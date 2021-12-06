@@ -3,6 +3,7 @@ package lichess
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/bznein/lichess/account"
 	"github.com/bznein/lichess/analysis"
@@ -152,4 +153,18 @@ func (c *Client) AnalyzeTablebase(variant string, fen string) (*tablebase.Tableb
 		return nil, err
 	}
 	return tbEntry, err
+}
+
+func (c *Client) GetRealTimeUsersStatus(ids []string, withGameIds bool) (user.RealTimeUsers, error) {
+	req, err := c.newRequest("GET", "/api/users/status", nil)
+	q := req.URL.Query()
+	q.Add("ids", strings.Join(ids, ","))
+	req.URL.RawQuery = q.Encode()
+
+	realTime := user.RealTimeUsers{}
+	_, err = c.do(req, &realTime)
+	if err != nil {
+		return nil, err
+	}
+	return realTime, err
 }
