@@ -1,10 +1,10 @@
 package lichess
 
 import (
-	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
@@ -24,7 +24,7 @@ type Client struct {
 	Token      string
 }
 
-func (c Client) newRequest(method string, path string, buf *bytes.Buffer) (*http.Request, error) {
+func (c Client) newRequest(method string, path string, buf io.Reader) (*http.Request, error) {
 	var err error
 	if c.Token == "" {
 		return nil, errors.New("No token specified")
@@ -35,9 +35,7 @@ func (c Client) newRequest(method string, path string, buf *bytes.Buffer) (*http
 
 	rel := &url.URL{Path: path}
 	u := c.BaseURL.ResolveReference(rel)
-	if buf == nil {
-		buf = &bytes.Buffer{}
-	}
+
 	req, err := http.NewRequest(method, u.String(), buf)
 	if err != nil {
 		return nil, err
@@ -46,6 +44,7 @@ func (c Client) newRequest(method string, path string, buf *bytes.Buffer) (*http
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("User-Agent", "Golang Lichess Client")
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.Token))
+
 	return req, nil
 }
 

@@ -302,3 +302,38 @@ func (c *Client) GetFollowedUsers() (account.Accounts, error) {
 	return accounts, nil
 
 }
+
+func (c *Client) FollowPlayer(username string) (*Ok, error) {
+	req, err := c.newRequest("POST", fmt.Sprintf("/api/rel/follow/%s", username), nil)
+	ok := &Ok{}
+	_, err = c.do(req, ok)
+	if err != nil {
+		return nil, err
+	}
+	return ok, nil
+}
+
+func (c *Client) UnfollowPlayer(username string) (*Ok, error) {
+	req, err := c.newRequest("POST", fmt.Sprintf("/api/rel/unfollow/%s", username), nil)
+	ok := &Ok{}
+	_, err = c.do(req, ok)
+	if err != nil {
+		return nil, err
+	}
+	return ok, nil
+}
+
+func (c *Client) CreateChallenge(request challenges.ChallengeRequest, username string) (*challenges.ChallengeRet, error) {
+	data := request.GetRequestData()
+	req, err := c.newRequest("POST", fmt.Sprintf("/api/challenge/%s", username), strings.NewReader(data.Encode()))
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Add("Content-Length", strconv.Itoa(len(data.Encode())))
+
+	challenge := challenges.ChallengeResponse{}
+	_, err = c.do(req, &challenge)
+	if err != nil {
+		return nil, err
+	}
+	return &(challenge).Challenge, nil
+
+}
