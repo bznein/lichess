@@ -32,7 +32,9 @@ func (c Client) newRequest(method string, path string, buf *bytes.Buffer) (*http
 
 	rel := &url.URL{Path: path}
 	u := c.BaseURL.ResolveReference(rel)
-
+	if buf == nil {
+		buf = &bytes.Buffer{}
+	}
 	req, err := http.NewRequest(method, u.String(), buf)
 	if err != nil {
 		return nil, err

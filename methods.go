@@ -219,3 +219,13 @@ func (c *Client) SendGameMessage(gameId string, room string, text string) (*Ok, 
 	}
 	return ok, nil
 }
+
+func (c *Client) MakeBoardMove(gameId string, move string) (*Ok, error) {
+	req, err := c.newRequest("POST", fmt.Sprintf("/api/board/game/%s/move/%s", gameId, move), nil)
+	ok := &Ok{}
+	_, err = c.do(req, ok)
+	if err != nil {
+		return nil, err
+	}
+	return ok, nil
+}
