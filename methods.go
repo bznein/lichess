@@ -229,3 +229,53 @@ func (c *Client) MakeBoardMove(gameId string, move string) (*Ok, error) {
 	}
 	return ok, nil
 }
+
+func (c *Client) AbortGame(gameId string) (*Ok, error) {
+	req, err := c.newRequest("POST", fmt.Sprintf("/api/board/game/%s/abort", gameId), nil)
+	ok := &Ok{}
+	_, err = c.do(req, ok)
+	if err != nil {
+		return nil, err
+	}
+	return ok, nil
+}
+
+func (c *Client) ResignGame(gameId string) (*Ok, error) {
+	req, err := c.newRequest("POST", fmt.Sprintf("/api/board/game/%s/abort", gameId), nil)
+	ok := &Ok{}
+	_, err = c.do(req, ok)
+	if err != nil {
+		return nil, err
+	}
+	return ok, nil
+}
+
+func (c *Client) HandleDraw(gameId string, accept bool) (*Ok, error) {
+	req, err := c.newRequest("POST", fmt.Sprintf("/api/board/game/%s/draw/%t", gameId, accept), nil)
+	ok := &Ok{}
+	_, err = c.do(req, ok)
+	if err != nil {
+		return nil, err
+	}
+	return ok, nil
+}
+
+func (c *Client) HandleTakeback(gameId string, accept bool) (*Ok, error) {
+	req, err := c.newRequest("POST", fmt.Sprintf("/api/board/game/%s/takeback/%t", gameId, accept), nil)
+	ok := &Ok{}
+	_, err = c.do(req, ok)
+	if err != nil {
+		return nil, err
+	}
+	return ok, nil
+}
+
+func (c *Client) ClaimVictory(gameId string) (*Ok, error) {
+	req, err := c.newRequest("POST", fmt.Sprintf("/api/board/game/%s/claim-victory", gameId), nil)
+	ok := &Ok{}
+	_, err = c.do(req, ok)
+	if err != nil {
+		return nil, err
+	}
+	return ok, nil
+}
