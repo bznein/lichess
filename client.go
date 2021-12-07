@@ -7,6 +7,9 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"strings"
+
+	ndjson "github.com/kandros/go-ndjson"
 )
 
 type HTTPClient interface {
@@ -55,6 +58,16 @@ func (c *Client) do(req *http.Request, v interface{}) (*http.Response, error) {
 		return resp, fmt.Errorf("expected status code 200, got %d - Requested URL was: %s", resp.StatusCode, req.URL)
 	}
 	defer resp.Body.Close()
-	err = json.NewDecoder(resp.Body).Decode(v)
+	if req.Header.Get("Accept") == "application/x-ndjson" {
+		respToJSON := ndjson.ToJSON(resp.Body)
+
+		// ndjson leaves a trailing , before the last ]
+		i := strings.LastIndex(respToJSON, ",")
+		respToJSON = respToJSON[:i] + strings.Replace(respToJSON[i:], ",", "", 1)
+		err = json.Unmarshal([]byte(respToJSON), v)
+	} else {
+		d := json.NewDecoder(resp.Body)
+		err = d.Decode(v)
+	}
 	return resp, err
 }

@@ -290,3 +290,15 @@ func (c *Client) ClaimVictory(gameId string) (*Ok, error) {
 	}
 	return ok, nil
 }
+
+func (c *Client) GetFollowedUsers() (account.Accounts, error) {
+	req, err := c.newRequest("GET", "api/rel/following", nil)
+	req.Header.Set("Accept", "application/x-ndjson")
+	accounts := account.Accounts{}
+	_, err = c.do(req, &accounts)
+	if err != nil {
+		return nil, err
+	}
+	return accounts, nil
+
+}

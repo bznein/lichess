@@ -132,3 +132,5 @@ type Preferences struct {
 type Kid struct {
 	Kid bool `json:"kid"`
 }
+
+type Accounts []Account
