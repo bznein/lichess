@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
 	"net/http"
 	"net/url"
 )
@@ -22,22 +21,13 @@ type Client struct {
 	Token      string
 }
 
-func (c Client) newRequest(method string, path string, body interface{}) (*http.Request, error) {
+func (c Client) newRequest(method string, path string, buf *bytes.Buffer) (*http.Request, error) {
 	var err error
 	if c.Token == "" {
 		return nil, errors.New("No token specified")
 	}
 	if c.BaseURL == nil {
 		c.BaseURL, err = url.Parse(lichessURL)
-	}
-
-	var buf io.ReadWriter
-	if body != nil {
-		buf = new(bytes.Buffer)
-		err := json.NewEncoder(buf).Encode(body)
-		if err != nil {
-			return nil, err
-		}
 	}
 
 	rel := &url.URL{Path: path}

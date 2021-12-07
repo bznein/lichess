@@ -1,18 +1,25 @@
 package lichess
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"strconv"
 	"strings"
 
 	"github.com/bznein/lichess/account"
 	"github.com/bznein/lichess/analysis"
+	"github.com/bznein/lichess/board"
 	"github.com/bznein/lichess/challenges"
 	"github.com/bznein/lichess/games"
 	"github.com/bznein/lichess/openings"
 	"github.com/bznein/lichess/tablebase"
 	"github.com/bznein/lichess/user"
 )
+
+type Ok struct {
+	Ok bool `json:"ok"`
+}
 
 func (c *Client) GetProfile() (*account.Account, error) {
 	req, err := c.newRequest("GET", "/api/account", nil)
@@ -181,4 +188,34 @@ func (c *Client) GetChallenges() (*challenges.Challenges, error) {
 	}
 	return challenges, err
 
+}
+
+func (c *Client) GetGameChat(gameId string) (board.Chat, error) {
+	req, err := c.newRequest("POST", fmt.Sprintf("/api/board/game/%s/chat", gameId), nil)
+	req.Header.Del("Content-Type")
+	chat := board.Chat{}
+	_, err = c.do(req, &chat)
+	if err != nil {
+		return nil, err
+	}
+	return chat, err
+
+}
+
+func (c *Client) SendGameMessage(gameId string, room string, text string) (*Ok, error) {
+	messagePayload := map[string]string{
+		"room": room,
+		"text": text,
+	}
+	jsonPayload, err := json.Marshal(messagePayload)
+	if err != nil {
+		return nil, fmt.Errorf("can't marshal message into json payload: %s", err)
+	}
+	req, err := c.newRequest("POST", fmt.Sprintf("/api/board/game/%s/chat", gameId), bytes.NewBuffer(jsonPayload))
+	ok := &Ok{}
+	_, err = c.do(req, ok)
+	if err != nil {
+		return nil, err
+	}
+	return ok, nil
 }
