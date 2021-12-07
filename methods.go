@@ -32,6 +32,17 @@ func (c *Client) GetProfile() (*account.Account, error) {
 	return user, err
 }
 
+func (c *Client) GetEmail() (*account.Email, error) {
+	req, err := c.newRequest("GET", "/api/account/email", nil)
+
+	user := &account.Email{}
+	_, err = c.do(req, &user)
+	if err != nil {
+		return nil, err
+	}
+	return user, err
+}
+
 func (c *Client) GetUser(username string) (*user.User, error) {
 	req, err := c.newRequest("GET", fmt.Sprintf("/api/user/%s", username), nil)
 
