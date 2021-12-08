@@ -337,3 +337,27 @@ func (c *Client) CreateChallenge(request challenges.ChallengeRequest, username s
 	return &(challenge).Challenge, nil
 
 }
+
+func (c *Client) AcceptChallenge(challengeID string) (*Ok, error) {
+	req, err := c.newRequest("POST", fmt.Sprintf("/api/challenge/%s/accept", challengeID), nil)
+
+	ok := &Ok{}
+	_, err = c.do(req, ok)
+	if err != nil {
+		return nil, err
+	}
+	return ok, nil
+
+}
+
+func (c *Client) DeclineChallenge(challengeID string) (*Ok, error) {
+	req, err := c.newRequest("POST", fmt.Sprintf("/api/challenge/%s/decline", challengeID), nil)
+
+	ok := &Ok{}
+	_, err = c.do(req, ok)
+	if err != nil {
+		return nil, err
+	}
+	return ok, nil
+
+}
