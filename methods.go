@@ -13,6 +13,7 @@ import (
 	"github.com/bznein/lichess/challenges"
 	"github.com/bznein/lichess/games"
 	"github.com/bznein/lichess/openings"
+	"github.com/bznein/lichess/puzzles"
 	"github.com/bznein/lichess/tablebase"
 	"github.com/bznein/lichess/user"
 )
@@ -292,7 +293,7 @@ func (c *Client) ClaimVictory(gameId string) (*Ok, error) {
 }
 
 func (c *Client) GetFollowedUsers() (account.Accounts, error) {
-	req, err := c.newRequest("GET", "api/rel/following", nil)
+	req, err := c.newRequest("GET", "/api/rel/following", nil)
 	req.Header.Set("Accept", "application/x-ndjson")
 	accounts := account.Accounts{}
 	_, err = c.do(req, &accounts)
@@ -360,4 +361,55 @@ func (c *Client) DeclineChallenge(challengeID string) (*Ok, error) {
 	}
 	return ok, nil
 
+}
+
+func (c *Client) ExportOneGame(request games.GameRequest, id string) (*games.GameResult, error) {
+	req, err := c.newRequest("GET", fmt.Sprintf("/game/export/%s", id), nil)
+	req.Header.Set("Accept", "application/json")
+	req.URL.RawQuery = request.GetQueryData().Encode()
+
+	game := &games.GameResult{}
+	_, err = c.do(req, game)
+	if err != nil {
+		return nil, err
+	}
+	return game, nil
+}
+
+func (c *Client) ExportOngoingGameOfAUser(request games.GameRequest, id string) (*games.GameResult, error) {
+	req, err := c.newRequest("GET", fmt.Sprintf("/api/user/%s/current-game", id), nil)
+	req.Header.Set("Accept", "application/json")
+	req.URL.RawQuery = request.GetQueryData().Encode()
+
+	game := &games.GameResult{}
+	_, err = c.do(req, game)
+	if err != nil {
+		return nil, err
+	}
+	return game, nil
+}
+
+func (c *Client) ExportGamesOfAUser(request games.UserGamesRequest, userName string) ([]games.CommonGameResult, error) {
+	req, err := c.newRequest("GET", fmt.Sprintf("/api/games/user/%s", userName), nil)
+	req.Header.Set("Accept", "application/x-ndjson")
+	req.URL.RawQuery = request.GetRequestData().Encode()
+
+	game := []games.CommonGameResult{}
+	_, err = c.do(req, &game)
+	if err != nil {
+		return nil, err
+	}
+	return game, nil
+}
+
+func (c *Client) GetDailyPuzzle() (*puzzles.PuzzleResult, error) {
+	req, err := c.newRequest("GET", "/api/puzzle/daily", nil)
+	req.Header.Set("Accept", "application/x-ndjson")
+
+	puzzle := []puzzles.PuzzleResult{}
+	_, err = c.do(req, &puzzle)
+	if err != nil {
+		return nil, err
+	}
+	return &(puzzle[0]), nil
 }

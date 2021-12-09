@@ -59,10 +59,11 @@ func (c *Client) do(req *http.Request, v interface{}) (*http.Response, error) {
 	defer resp.Body.Close()
 	if req.Header.Get("Accept") == "application/x-ndjson" {
 		respToJSON := ndjson.ToJSON(resp.Body)
-
 		// ndjson leaves a trailing , before the last ]
 		i := strings.LastIndex(respToJSON, ",")
-		respToJSON = respToJSON[:i] + strings.Replace(respToJSON[i:], ",", "", 1)
+		if i == len(respToJSON)-2 {
+			respToJSON = respToJSON[:i] + strings.Replace(respToJSON[i:], ",", "", 1)
+		}
 		err = json.Unmarshal([]byte(respToJSON), v)
 	} else {
 		d := json.NewDecoder(resp.Body)
