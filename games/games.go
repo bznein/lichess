@@ -117,7 +117,6 @@ type Clock struct {
 type GameResult struct {
 	CommonGameResult
 	InitialFen  string `json:"initialFen"`
-	Winner      string `json:"winner"`
 	Pgn         string `json:"pgn"`
 	DaysPerTurn int    `json:"daysPerTurn"`
 	Analysis    []Eval `json:"analysis"`
@@ -138,4 +137,5 @@ type CommonGameResult struct {
 	Opening    Opening `json:"opening"`
 	Moves      string  `json:"moves"`
 	Clock      Clock   `json:"clock"`
+	Winner     string  `json:"winner"`
 }

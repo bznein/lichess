@@ -31,6 +31,9 @@ func (c Client) newRequest(method string, path string, buf io.Reader) (*http.Req
 	}
 	if c.BaseURL == nil {
 		c.BaseURL, err = url.Parse(lichessURL)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	rel := &url.URL{Path: path}
